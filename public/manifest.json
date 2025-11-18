@@ -1,0 +1,7 @@
+{
+  "name": "Senior Care Assistant",
+  "description": "A comprehensive assistant for seniors to manage medications, appointments, and daily activities with ease. It features large fonts, voice commands, and stores all data locally on the device for privacy and offline access.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}

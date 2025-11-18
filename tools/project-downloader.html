@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project Downloader</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f0f0; margin: 0; }
+        button { font-size: 1.5rem; padding: 1rem 2rem; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <button id="downloadBtn">Download Project.zip</button>
+
+    <script>
+        const projectFiles = {
+            "index.html": `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Senior Care Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root, html.light {
+        --color-primary: 13 148 136;
+        --color-primary-focus: 15 118 110;
+        --color-primary-content: 255 255 255;
+        --color-secondary: 91 33 182;
+        --color-secondary-focus: 76 29 149;
+        --color-secondary-content: 255 255 255;
+        --color-accent: 219 39 119;
+        --color-neutral: 55 65 81;
+        --color-base-100: 255 255 255;
+        --color-base-200: 243 244 246;
+        --color-base-300: 229 231 235;
+        --color-info: 59 130 246;
+        --color-success: 22 163 74;
+        --color-warning: 245 158 11;
+        --color-error: 220 38 38;
+        --color-input-bg: 55 65 81;
+        --color-input-text: 255 255 255;
+      }
+      html.dark {
+        --color-primary: 45 212 191;
+        --color-primary-focus: 94 234 212;
+        --color-primary-content: 4 47 46;
+        --color-secondary: 167 139 250;
+        --color-secondary-focus: 196 181 253;
+        --color-secondary-content: 44 11 90;
+        --color-accent: 244 114 182;
+        --color-neutral: 209 213 219; /* text color */
+        --color-base-100: 31 41 55; /* card bg */
+        --color-base-200: 17 24 39; /* page bg */
+        --color-base-300: 55 65 81; /* hover bg */
+        --color-info: 96 165 250;
+        --color-success: 74 222 128;
+        --color-warning: 251 191 36;
+        --color-error: 248 113 113;
+      }
+      html.high-contrast {
+        --color-primary: 251 191 36;
+        --color-primary-focus: 253 224 71;
+        --color-primary-content: 0 0 0;
+        --color-secondary: 255 255 255;
+        --color-secondary-focus: 229 231 235;
+        --color-secondary-content: 0 0 0;
+        --color-accent: 244 114 182;
+        --color-neutral: 255 255 255; /* text color */
+        --color-base-100: 17 24 39; /* card bg */
+        --color-base-200: 0 0 0; /* page bg */
+        --color-base-300: 55 65 81; /* hover bg */
+        --color-info: 96 165 250;
+        --color-success: 74 222 128;
+        --color-warning: 251 191 36;
+        --color-error: 248 113 113;
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+
+      @keyframes fade-in-down {
+        from {
+          opacity: 0;
+          transform: translateY(-1rem);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-fade-in-down {
+        animation: fade-in-down 0.5s ease-out forwards;
+      }
+
+      @keyframes fade-out-up {
+        from {
+          opacity: 1;
+          transform: translateY(0);
+          max-height: 150px; /* Approximate height */
+        }
+        to {
+          opacity: 0;
+          transform: translateY(-1rem);
+          max-height: 0;
+          padding-top: 0;
+          padding-bottom: 0;
+          margin-top: 0;
+          margin-bottom: 0;
+          overflow: hidden;
+        }
+      }
+      .animate-fade-out-up {
+        animation: fade-out-up 0.5s ease-out forwards;
+      }
+    </style>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              'primary': 'rgb(var(--color-primary) / <alpha-value>)',
+              'primary-focus': 'rgb(var(--color-primary-focus) / <alpha-value>)',
+              'primary-content': 'rgb(var(--color-primary-content) / <alpha-value>)',
+              'secondary': 'rgb(var(--color-secondary) / <alpha-value>)',
+              'secondary-focus': 'rgb(var(--color-secondary-focus) / <alpha-value>)',
+              'secondary-content': 'rgb(var(--color-secondary-content) / <alpha-value>)',
+              'accent': 'rgb(var(--color-accent) / <alpha-value>)',
+              'neutral': 'rgb(var(--color-neutral) / <alpha-value>)',
+              'base-100': 'rgb(var(--color-base-100) / <alpha-value>)',
+              'base-200': 'rgb(var(--color-base-200) / <alpha-value>)',
+              'base-300': 'rgb(var(--color-base-300) / <alpha-value>)',
+              'info': 'rgb(var(--color-info) / <alpha-value>)',
+              'success': 'rgb(var(--color-success) / <alpha-value>)',
+              'warning': 'rgb(var(--color-warning) / <alpha-value>)',
+              'error': 'rgb(var(--color-error) / <alpha-value>)',
+              'input-bg': 'rgb(var(--color-input-bg) / <alpha-value>)',
+              'input-text': 'rgb(var(--color-input-text) / <alpha-value>)',
+            }
+          }
+        }
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^18.0.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^18.0.0/",
+    "react/": "https://aistudiocdn.com/react@^18.0.0/",
+    "uuid": "https://aistudiocdn.com/uuid@^9.0.0",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.29.1"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>`,
+            "index.tsx": `
+import React from 'react';
+import * as ReactDOM from 'react-dom/client';
+import App from './App';
+
+const rootElement = document.getElementById('root');
+if (!rootElement) {
+  throw new Error("Could not find root element to mount to");
+}
+
+const root = ReactDOM.createRoot(rootElement);
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);`,
+            "metadata.json": `
+{
+  "name": "Copy of Senior Care Assistant",
+  "description": "A comprehensive assistant for seniors to manage medications, appointments, and daily activities with ease. It features large fonts, voice commands, and stores all data locally on the device for privacy and offline access.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}`,
+            "App.tsx": `
+import React, { useState, useEffect, useMemo } from 'react';
+import { View, type AppData, type FontSize, type Medication, type Appointment } from './types';
+import { useLocalStorage } from './hooks/useLocalStorage';
+import { useSpeechRecognition } from './hooks/useSpeechRecognition';
+import { useNotifier } from './hooks/useNotifier';
+import { useGeminiAssistant } from './hooks/useGeminiAssistant';
+import { v4 as uuidv4 } from 'uuid';
+import Dashboard from './components/Dashboard';
+import MedicationManager from './components/MedicationManager';
+import AppointmentCalendar from './components/AppointmentCalendar';
+import ActivityTracker from './components/ActivityTracker';
+import EmergencyInfo from './components/EmergencyInfo';
+import Settings from './components/Settings';
+import { initialData } from './constants';
+import { HomeIcon, PillIcon, CalendarIcon, HeartIcon, ExclamationIcon, CogIcon, MicIcon, SpinnerIcon } from './components/common/Icons';
+import { speak } from './utils/speaker';
+import Toast from './components/common/Toast';
+import { triggerHapticFeedback } from './utils/haptics';
+
+
+export default function App() {
+  const [appData, setAppData] = useLocalStorage<AppData>('seniorCareData', initialData);
+  const [currentView, setCurrentView] = useState<View>(View.DASHBOARD);
+  
+  const { isListening, transcript, startListening, stopListening, isSupported, error: speechError } = useSpeechRecognition();
+  const { permission, requestNotificationPermission } = useNotifier(appData);
+  const { isProcessing, processTranscript } = useGeminiAssistant();
+  const [toast, setToast] = useState({ message: '', type: 'error' as 'error' | 'success', isVisible: false });
+  const [ariaAnnouncement, setAriaAnnouncement] = useState('');
+
+  const showToast = (message: string, type: 'error' | 'success' = 'error') => {
+    setToast({ message, type, isVisible: true });
+  };
+
+  useEffect(() => {
+    if(speechError) {
+      showToast(speechError);
+    }
+  }, [speechError]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.remove('light', 'dark', 'high-contrast');
+    root.classList.add(appData.settings.theme);
+
+    const fontSizeMapping: Record<FontSize, string> = {
+      'text-xl': '100%',
+      'text-2xl': '112.5%',
+      'text-3xl': '125%',
+      'text-4xl': '137.5%',
+    };
+    root.style.fontSize = fontSizeMapping[appData.settings.fontSize] || '112.5%';
+    
+  }, [appData.settings]);
+
+  useEffect(() => {
+    if (transcript) {
+        stopListening();
+        handleVoiceCommand(transcript);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [transcript]);
+
+  const handleVoiceCommand = async (command: string) => {
+      const functionCalls = await processTranscript(command);
+      if (!functionCalls) return;
+
+      for (const call of functionCalls) {
+          console.log('Executing function call:', call);
+          let announcement = '';
+
+          switch (call.name) {
+              case 'navigateToView':
+                  const view = call.args.view as View;
+                  if(Object.values(View).includes(view)) {
+                      setCurrentView(view);
+                      announcement = \`Navigating to \${view.toLowerCase()}.\`;
+                  } else {
+                      announcement = \`Sorry, I can't navigate to \${view}.\`;
+                  }
+                  break;
+
+              case 'addMedication':
+                  const { name, dosage, time } = call.args;
+                  if (name && dosage && time) {
+                      const newMed: Medication = { id: uuidv4(), name: name as string, dosage: dosage as string, time: time as string, taken: false };
+                      setAppData(prev => ({ ...prev, medications: [...prev.medications, newMed].sort((a,b) => a.time.localeCompare(b.time)) }));
+                      announcement = \`Okay, I've added \${name} to your schedule at \${time}.\`;
+                  } else {
+                      announcement = "I'm sorry, I didn't get all the details for the medication. Please try again.";
+                  }
+                  break;
+
+              case 'markMedicationAsTaken':
+                  const medName = (call.args.name as string).toLowerCase();
+                  let foundMed = false;
+                  setAppData(prev => {
+                      const newMeds = prev.medications.map(med => {
+                          if (med.name.toLowerCase() === medName && !med.taken) {
+                              foundMed = true;
+                              return { ...med, taken: true };
+                          }
+                          return med;
+                      });
+                      return { ...prev, medications: newMeds };
+                  });
+                  announcement = foundMed ? \`Okay, I've marked \${call.args.name} as taken.\` : \`I couldn't find an untaken medication named \${call.args.name}.\`;
+                  break;
+
+              case 'addAppointment':
+                  const { title, date, time: apptTime, location } = call.args;
+                  if (title && date && apptTime) {
+                      const newAppt: Appointment = { id: uuidv4(), title: title as string, date: date as string, time: apptTime as string, location: (location as string) || '', notes: '' };
+                       setAppData(prev => ({ ...prev, appointments: [...prev.appointments, newAppt].sort((a,b) => new Date(\`\${a.date}T\${a.time}\`).getTime() - new Date(\`\${b.date}T\${b.time}\`).getTime()) }));
+                      announcement = \`Okay, I've scheduled \${title} for \${date} at \${apptTime}.\`;
+                  } else {
+                      announcement = "I'm sorry, I didn't get all the details for the appointment. Please try again.";
+                  }
+                  break;
+
+              case 'getDailySummary':
+                  const today = new Date();
+                  today.setHours(0,0,0,0);
+                  const untakenMeds = appData.medications.filter(m => !m.taken);
+                  const upcomingAppts = appData.appointments.filter(a => new Date(a.date) >= today)
+                      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+                  
+                  let summary = '';
+                  if (untakenMeds.length > 0) {
+                      summary += \`You have \${untakenMeds.length} medications left today. \`;
+                  } else {
+                      summary += 'You have taken all your medications for today. ';
+                  }
+                  if (upcomingAppts.length > 0) {
+                      const nextAppt = upcomingAppts[0];
+                      const apptDate = new Date(nextAppt.date).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+                      summary += \`Your next appointment is \${nextAppt.title} on \${apptDate} at \${nextAppt.time}.\`;
+                  } else {
+                      summary += 'You have no upcoming appointments.';
+                  }
+                  announcement = summary;
+                  break;
+
+              case 'speak':
+                  announcement = call.args.message as string;
+                  break;
+                  
+              default:
+                  announcement = "Sorry, I'm not sure how to do that.";
+          }
+
+          if (announcement) {
+              speak(announcement);
+              setAriaAnnouncement(announcement);
+          }
+      }
+  };
+
+
+  const renderView = () => {
+    switch (currentView) {
+      case View.DASHBOARD:
+        return <Dashboard appData={appData} setAppData={setAppData} setCurrentView={setCurrentView} />;
+      case View.MEDICATIONS:
+        return <MedicationManager medications={appData.medications} setAppData={setAppData} />;
+      case View.APPOINTMENTS:
+        return <AppointmentCalendar appointments={appData.appointments} setAppData={setAppData} />;
+      case View.ACTIVITIES:
+        return <ActivityTracker activities={appData.activities} setAppData={setAppData} />;
+      case View.EMERGENCY:
+        return <EmergencyInfo info={appData.emergencyInfo} setAppData={setAppData} />;
+      case View.SETTINGS:
+        return <Settings
+                  settings={appData.settings}
+                  setAppData={setAppData}
+                  notificationPermission={permission}
+                  requestNotificationPermission={requestNotificationPermission}
+                />;
+      default:
+        return <Dashboard appData={appData} setAppData={setAppData} setCurrentView={setCurrentView} />;
+    }
+  };
+
+  const navItems = useMemo(() => [
+    { view: View.DASHBOARD, label: 'Dashboard', icon: <HomeIcon /> },
+    { view: View.MEDICATIONS, label: 'Medications', icon: <PillIcon /> },
+    { view: View.APPOINTMENTS, label: 'Appointments', icon: <CalendarIcon /> },
+    { view: View.ACTIVITIES, label: 'Activities', icon: <HeartIcon /> },
+    { view: View.EMERGENCY, label: 'Emergency', icon: <ExclamationIcon /> },
+    { view: View.SETTINGS, label: 'Settings', icon: <CogIcon /> },
+  ], []);
+
+  const handleMicClick = () => {
+    triggerHapticFeedback();
+    isListening ? stopListening() : startListening();
+  };
+
+  return (
+    <div className={\`flex h-screen bg-base-200 text-neutral transition-colors duration-300\`}>
+      {/* Sidebar Navigation */}
+      <aside className="w-48 bg-base-100 flex flex-col items-center p-6 shadow-lg">
+        <div className="text-primary font-bold text-4xl mb-16">SC</div>
+        <nav className="flex flex-col items-center space-y-10">
+          {navItems.map(item => (
+            <button
+              key={item.view}
+              onClick={() => setCurrentView(item.view)}
+              className={\`flex flex-col items-center p-4 rounded-xl transition-all duration-200 w-32 h-32 justify-center
+                \${currentView === item.view ? 'bg-primary text-primary-content shadow-lg scale-110' : 'hover:bg-primary/10'}\`}
+              title={item.label}
+            >
+              <div className="w-16 h-16">{item.icon}</div>
+              <span className="text-lg mt-3">{item.label}</span>
+            </button>
+          ))}
+        </nav>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 p-8 md:p-12 overflow-y-auto">
+        {renderView()}
+      </main>
+
+      {/* Voice Command Button */}
+      {isSupported && (
+        <div className="absolute bottom-8 right-8">
+          <button
+            onClick={handleMicClick}
+            disabled={isProcessing}
+            className={\`w-24 h-24 rounded-full flex items-center justify-center text-white shadow-xl transition-all duration-300
+              \${isProcessing
+                ? 'bg-gray-500 cursor-not-allowed'
+                : isListening 
+                ? 'bg-red-500 animate-pulse' 
+                : 'bg-secondary hover:bg-secondary-focus'}\`}
+            aria-label={isProcessing ? 'Processing command' : isListening ? 'Stop Listening' : 'Start Voice Command'}
+          >
+            <div className="w-12 h-12">
+              {isProcessing ? <SpinnerIcon/> : <MicIcon />}
+            </div>
+          </button>
+        </div>
+      )}
+
+      <Toast
+          isVisible={toast.isVisible}
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(prev => ({ ...prev, isVisible: false }))}
+      />
+      <div className="sr-only" aria-live="polite" aria-atomic="true">{ariaAnnouncement}</div>
+    </div>
+  );
+}`,
+            "constants.ts": `
+import { type AppData, ActivityType } from './types';
+import { v4 as uuidv4 } from 'uuid';
+
+export const initialData: AppData = {
+  medications: [
+    { id: uuidv4(), name: 'Heart Medication', dosage: '1 pill', time: '08:00', taken: true },
+    { id: uuidv4(), name: 'Vitamin D', dosage: '2 pills', time: '08:00', taken: false },
+    { id: uuidv4(), name: 'Blood Pressure', dosage: '1 pill', time: '20:00', taken: false },
+  ],
+  appointments: [
+    { id: uuidv4(), title: 'Cardiologist Check-up', date: new Date(new Date().setDate(new Date().getDate() + 3)).toISOString().split('T')[0], time: '10:30', location: 'City Heart Clinic, Room 204', notes: 'Bring recent blood test results.' },
+    { id: uuidv4(), title: 'Dentist Appointment', date: new Date(new Date().setDate(new Date().getDate() + 14)).toISOString().split('T')[0], time: '14:00', location: 'Sunny Smiles Dental', notes: 'Routine cleaning.' },
+  ],
+  activities: [
+    { id: uuidv4(), type: ActivityType.PHYSICAL, description: 'Morning Walk in the Park', date: new Date().toISOString().split('T')[0], durationMinutes: 30 },
+    { id: uuidv4(), type: ActivityType.SOCIAL, description: 'Phone call with granddaughter', date: new Date().toISOString().split('T')[0], durationMinutes: 20 },
+  ],
+  emergencyInfo: {
+    primaryDoctor: { name: 'Dr. Evelyn Reed', phone: '555-123-4567' },
+    allergies: 'Penicillin, Peanuts',
+    conditions: 'High Blood Pressure, Type 2 Diabetes',
+    contacts: [
+      { id: uuidv4(), name: 'Sarah Miller', relationship: 'Daughter', phone: '555-987-6543' },
+      { id: uuidv4(), name: 'John Miller', relationship: 'Son', phone: '555-987-1122' },
+    ],
+  },
+  settings: {
+    fontSize: 'text-2xl',
+    theme: 'light',
+  },
+};`,
+            "types.ts": `
+export enum View {
+  DASHBOARD = 'DASHBOARD',
+  MEDICATIONS = 'MEDICATIONS',
+  APPOINTMENTS = 'APPOINTMENTS',
+  ACTIVITIES = 'ACTIVITIES',
+  EMERGENCY = 'EMERGENCY',
+  SETTINGS = 'SETTINGS',
+}
+
+export interface Medication {
+  id: string;
+  name: string;
+  dosage: string;
+  time: string; // "HH:MM"
+  taken: boolean;
+}
+
+export interface Appointment {
+  id: string;
+  title: string;
+  date: string; // "YYYY-MM-DD"
+  time: string; // "HH:MM"
+  location: string;
+  notes: string;
+}
+
+export enum ActivityType {
+    PHYSICAL = 'Physical',
+    SOCIAL = 'Social',
+    MENTAL = 'Mental'
+}
+
+export interface Activity {
+  id:string;
+  type: ActivityType;
+  description: string;
+  date: string; // "YYYY-MM-DD"
+  durationMinutes: number;
+}
+
+export interface EmergencyContact {
+  id: string;
+  name: string;
+  relationship: string;
+  phone: string;
+}
+
+export interface EmergencyInfoData {
+  primaryDoctor: { name: string; phone: string; };
+  allergies: string;
+  conditions: string;
+  contacts: EmergencyContact[];
+}
+
+export type Theme = 'light' | 'dark' | 'high-contrast';
+export type FontSize = 'text-xl' | 'text-2xl' | 'text-3xl' | 'text-4xl';
+
+export interface AppSettings {
+  fontSize: FontSize;
+  theme: Theme;
+}
+
+export interface AppData {
+  medications: Medication[];
+  appointments: Appointment[];
+  activities: Activity[];
+  emergencyInfo: EmergencyInfoData;
+  settings: AppSettings;
+}`,
+            "hooks": {
+                "useGeminiAssistant.ts": `
+import { useState } from 'react';
+import { GoogleGenAI, FunctionDeclaration, Type } from '@google/genai';
+import { View } from '../types';
+
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
+
+const tools: FunctionDeclaration[] = [
+  {
+    name: 'navigateToView',
+    parameters: {
+      type: Type.OBJECT,
+      description: 'Navigates to a specific view in the application.',
+      properties: {
+        view: {
+          type: Type.STRING,
+          description: 'The view to navigate to.',
+          enum: Object.values(View),
+        },
+      },
+      required: ['view'],
+    },
+  },
+  {
+    name: 'addMedication',
+    parameters: {
+        type: Type.OBJECT,
+        description: 'Adds a new medication to the user\\'s schedule.',
+        properties: {
+            name: { type: Type.STRING, description: 'The name of the medication.' },
+            dosage: { type: Type.STRING, description: 'The dosage, e.g., "1 pill", "10ml".' },
+            time: { type: Type.STRING, description: 'The time to take the medication in HH:MM format.' },
+        },
+        required: ['name', 'dosage', 'time'],
+    },
+  },
+  {
+    name: 'markMedicationAsTaken',
+    parameters: {
+        type: Type.OBJECT,
+        description: 'Marks a specific medication as taken for the day.',
+        properties: {
+            name: { type: Type.STRING, description: 'The name of the medication to mark as taken.' },
+        },
+        required: ['name'],
+    },
+  },
+  {
+    name: 'addAppointment',
+    parameters: {
+        type: Type.OBJECT,
+        description: 'Adds a new appointment to the calendar. The date should be in YYYY-MM-DD format.',
+        properties: {
+            title: { type: Type.STRING, description: 'The title of the appointment.' },
+            date: { type: Type.STRING, description: 'The date of the appointment in YYYY-MM-DD format.' },
+            time: { type: Type.STRING, description: 'The time of the appointment in HH:MM format.' },
+            location: { type: Type.STRING, description: 'The location of the appointment.' },
+        },
+        required: ['title', 'date', 'time'],
+    },
+  },
+  {
+    name: 'getDailySummary',
+    parameters: {
+        type: Type.OBJECT,
+        description: 'Reads a summary of today\\'s remaining medications and upcoming appointments.',
+        properties: {},
+        required: [],
+    },
+  },
+];
+
+export function useGeminiAssistant() {
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const processTranscript = async (transcript: string) => {
+    setIsProcessing(true);
+    try {
+      const prompt = \`The current date is \${new Date().toDateString()}. The user says: "\${transcript}"\`;
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: prompt,
+        config: {
+          systemInstruction: "You are a helpful assistant for a senior care application. Your role is to understand the user's voice commands and translate them into specific function calls. Be concise. Infer dates and times from phrases like 'tomorrow' or 'next week'.",
+          tools: [{ functionDeclarations: tools }],
+        },
+      });
+
+      if (response.functionCalls && response.functionCalls.length > 0) {
+        return response.functionCalls.map(fc => ({ name: fc.name, args: fc.args }));
+      }
+      
+      if (response.text) {
+        return [{ name: 'speak', args: { message: response.text } }];
+      }
+
+      return [{ name: 'speak', args: { message: "Sorry, I couldn't understand that. Please try again." } }];
+
+    } catch (error) {
+      console.error('Error processing transcript with Gemini:', error);
+      return [{ name: 'speak', args: { message: "I'm having trouble connecting. Please try again later." } }];
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  return { isProcessing, processTranscript };
+}`,
+                "useLocalStorage.ts": `
+import { useState, useEffect } from 'react';
+
+export function useLocalStorage<T,>(key: string, initialValue: T): [T, (value: T | ((val: T) => T)) => void] {
+  const [storedValue, setStoredValue] = useState<T>(() => {
+    if (typeof window === 'undefined') {
+      return initialValue;
+    }
+    try {
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      console.error(error);
+      return initialValue;
+    }
+  });
+
+  const setValue = (value: T | ((val: T) => T)) => {
+    try {
+      const valueToStore = value instanceof Function ? value(storedValue) : value;
+      setStoredValue(valueToStore);
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(key, JSON.stringify(valueToStore));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === key) {
+        try {
+            if (e.newValue) {
+                 setStoredValue(JSON.parse(e.newValue));
+            }
+        } catch(e) {
+            console.error(e)
+        }
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [key]);
+
+
+  return [storedValue, setValue];
+}`,
+                "useNotifier.ts": `
+import { useState, useEffect, useRef } from 'react';
+import type { AppData } from '../types';
+import { speak } from '../utils/speaker';
+
+export function useNotifier(appData: AppData) {
+  const [permission, setPermission] = useState<NotificationPermission>(
+    typeof window !== 'undefined' && 'Notification' in window ? Notification.permission : 'denied'
